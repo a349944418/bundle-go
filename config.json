@@ -1,0 +1,15 @@
+{
+    "shopify": {
+        "api_key": "your_shopify_api_key",
+        "api_secret": "your_shopify_api_secret",
+        "scopes": "read_products,write_products",
+        "redirect_uri": "https://yourapp.com/callback"
+    },
+    "database": {
+        "user": "your_db_user",
+        "password": "your_db_password",
+        "host": "localhost",
+        "port": "3306",
+        "name": "shopify_app"
+    }
+}
