@@ -12,4 +12,5 @@
         "port": "3306",
         "name": "shopline_app"
     }
+    "install": "https://handle.myshopline.com/admin/oauth-web/#/oauth/authorize?appKey=11114&responseType=code&scope=read_products,write_products&redirectUri=https://distributor-biodiversity-non-include.trycloudflare.com/callback"
 }
