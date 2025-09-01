@@ -6,12 +6,12 @@ import (
 )
 
 type Config struct {
-	Shopify struct {
+	Shopline struct {
 		APIKey      string `json:"api_key"`
 		APISecret   string `json:"api_secret"`
 		Scopes      string `json:"scopes"`
 		RedirectURI string `json:"redirect_uri"`
-	} `json:"shopify"`
+	} `json:"shopline"`
 	Database struct {
 		User     string `json:"user"`
 		Password string `json:"password"`

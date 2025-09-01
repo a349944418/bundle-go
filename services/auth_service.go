@@ -25,8 +25,8 @@ type Token struct {
 func ExchangeCodeForToken(shop string, code string, cfg *config.Config) (Token, error) {
 	tokenURL := fmt.Sprintf("https://%s/admin/oauth/access_token", shop)
 	data := url.Values{
-		"client_id":     {cfg.Shopify.APIKey},
-		"client_secret": {cfg.Shopify.APISecret},
+		"client_id":     {cfg.Shopline.APIKey},
+		"client_secret": {cfg.Shopline.APISecret},
 		"code":          {code},
 	}
 	resp, err := http.PostForm(tokenURL, data)
@@ -90,7 +90,7 @@ func ValidateToken(shop string, accessToken string) bool {
 	if err != nil {
 		return false
 	}
-	req.Header.Set("X-Shopify-Access-Token", accessToken)
+	req.Header.Set("X-Shopline-Access-Token", accessToken)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)

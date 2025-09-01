@@ -13,61 +13,47 @@ import (
 
 func InstallHandler(db *gorm.DB, cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		shop := c.Query("shop")
+		shop := c.Query("handle")
 		if shop == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "缺少店铺参数"})
 			return
 		}
 
-		nonce, err := utils.GenerateNonce()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "生成 nonce 失败"})
-			return
-		}
-
-		utils.StoreNonce(nonce)
-
-		authURL := utils.BuildAuthURL(shop, nonce)
+		authURL := utils.BuildAuthURL(shop)
 		c.Redirect(http.StatusFound, authURL)
 	}
 }
 
 func CallbackHandler(db *gorm.DB, cfg *config.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		shop := c.Query("shop")
+		handle := c.Query("handle")
 		code := c.Query("code")
-		state := c.Query("state")
-		hmacStr := c.Query("hmac")
+		hmacStr := c.Query("sign")
 
-		if shop == "" || code == "" || state == "" || hmacStr == "" {
+		if handle == "" || code == "" || hmacStr == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "缺少必要参数"})
 			return
 		}
 
 		query := c.Request.URL.RawQuery
-		if !utils.VerifyHMAC(strings.Replace(query, "hmac="+hmacStr, "", 1), hmacStr) {
+		if !utils.VerifyHMAC(strings.Replace(query, "sign="+hmacStr, "", 1), hmacStr) {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "HMAC 验证失败"})
 			return
 		}
 
-		if !utils.VerifyNonce(state) {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "无效的 state"})
-			return
-		}
-
-		token, err := services.ExchangeCodeForToken(shop, code, cfg)
+		token, err := services.ExchangeCodeForToken(handle, code, cfg)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "获取令牌失败: " + err.Error()})
 			return
 		}
 
-		if err := services.StoreShopToken(db, shop, token); err != nil {
+		if err := services.StoreShopToken(db, handle, token); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "存储令牌失败: " + err.Error()})
 			return
 		}
 
 		// 授权成功，重定向到首页
-		c.Redirect(http.StatusFound, "/home?shop="+shop)
+		c.Redirect(http.StatusFound, "/home?shop="+handle+".myshopline.com")
 	}
 }
 

@@ -8,7 +8,7 @@ import (
 
 type Shop struct {
 	gorm.Model
-	ShopDomain   string    `gorm:"uniqueIndex;not null"`
+	ShopDomain   string    `gorm:"uniqueIndex:idx_shop_domain,unique,length:191;size:255;not null"`
 	AccessToken  string    `gorm:"not null"`
 	RefreshToken string    // Optional
 	Scope        string    `gorm:"not null"`

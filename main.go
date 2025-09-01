@@ -33,11 +33,8 @@ func main() {
 		panic("failed to migrate database: " + err.Error())
 	}
 
-	// Pass config to utils for nonce cleanup and other operations
+	// Pass config to utils
 	utils.InitConfig(cfg)
-
-	// Start nonce cleanup
-	go utils.CleanupNonces()
 
 	// Setup and run server
 	r := routes.SetupRouter(db)
