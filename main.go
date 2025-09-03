@@ -6,6 +6,7 @@ import (
 	"project/models"
 	"project/routes"
 	"project/utils"
+	"time"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -20,8 +21,11 @@ func main() {
 		panic("failed to load config: " + err.Error())
 	}
 
+	// 设置全局时区为 UTC
+	time.Local = time.UTC
+
 	// Initialize database connection
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=UTC",
 		cfg.Database.User, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port, cfg.Database.Name)
 	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

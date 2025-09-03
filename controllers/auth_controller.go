@@ -20,6 +20,7 @@ func InstallHandler(db *gorm.DB, cfg *config.Config) gin.HandlerFunc {
 		}
 
 		authURL := utils.BuildAuthURL(shop)
+
 		c.Redirect(http.StatusFound, authURL)
 	}
 }
@@ -53,7 +54,7 @@ func CallbackHandler(db *gorm.DB, cfg *config.Config) gin.HandlerFunc {
 		}
 
 		// 授权成功，重定向到首页
-		c.Redirect(http.StatusFound, "/home?shop="+handle+".myshopline.com")
+		c.Redirect(http.StatusFound, "/?handle="+handle)
 	}
 }
 
