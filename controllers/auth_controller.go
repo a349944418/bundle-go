@@ -58,15 +58,9 @@ func CallbackHandler(db *gorm.DB, cfg *config.Config) gin.HandlerFunc {
 	}
 }
 
-func ProtectedHandler(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "受保护的内容 - 令牌有效"})
-	}
-}
-
 func HomeHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		shop := c.Query("shop")
+		shop := c.Query("handle")
 		c.HTML(http.StatusOK, "home.html", gin.H{
 			"ShopDomain": shop,
 		})

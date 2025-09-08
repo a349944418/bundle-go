@@ -82,7 +82,7 @@ func ExchangeCodeForToken(shop string, code string, cfg *config.Config) (Token, 
 	if expireTimeLocal.After(time.Now()) {
 		token.ExpiresAt = expireTimeLocal.UTC()
 	}
-
+	fmt.Printf("Exchanged code for token: %+v\n", token)
 	return token, nil
 }
 
@@ -95,7 +95,7 @@ func StoreShopToken(db *gorm.DB, shop string, token Token) error {
 		ExpiresAt:    token.ExpiresAt,
 		InstalledAt:  time.Now(),
 	}
-	return db.Save(&shopRecord).Error
+	return db.Where("shop_domain = ?", shop).FirstOrCreate(&shopRecord).Error
 }
 
 func GetToken(db *gorm.DB, shop string) (Token, error) {

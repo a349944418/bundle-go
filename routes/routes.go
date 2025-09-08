@@ -23,12 +23,12 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 	// 公开路由
 	r.GET("/install", controllers.InstallHandler(db, cfg))
 	r.GET("/callback", controllers.CallbackHandler(db, cfg))
-	r.GET("/", controllers.HomeHandler(db))
 
 	// 受保护路由组（包括首页和 protected）
 	protected := r.Group("/")
 	protected.Use(middleware.AuthMiddleware(db))
 	{
+		protected.GET("/", controllers.HomeHandler(db))
 		protected.GET("/protected", controllers.ProtectedHandler(db))
 	}
 
