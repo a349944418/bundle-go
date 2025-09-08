@@ -1,13 +1,31 @@
 package routes
 
 import (
+	"path/filepath"
 	"project/config"
 	"project/controllers"
 	"project/middleware"
+	"strings"
 
+	"github.com/gin-contrib/multitemplate"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
+
+func createRender() multitemplate.Renderer {
+	render := multitemplate.NewRenderer()
+	pages, err := filepath.Glob("templates/*.html")
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// For each page, generate a template including the layouts.
+	for _, page := range pages {
+		render.AddFromFiles(strings.TrimSuffix(filepath.Base(page), ".html"), "templates/layout/base.html", page)
+	}
+
+	return render
+}
 
 func SetupRouter(db *gorm.DB) *gin.Engine {
 	cfg, err := config.LoadConfig("config.json")
@@ -17,8 +35,8 @@ func SetupRouter(db *gorm.DB) *gin.Engine {
 
 	r := gin.Default()
 
-	// 加载 HTML 模板
-	r.LoadHTMLGlob("templates/*")
+	// 使用 multitemplate
+	r.HTMLRender = createRender()
 
 	// 公开路由
 	r.GET("/install", controllers.InstallHandler(db, cfg))

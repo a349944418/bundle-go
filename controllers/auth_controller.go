@@ -61,8 +61,8 @@ func CallbackHandler(db *gorm.DB, cfg *config.Config) gin.HandlerFunc {
 func HomeHandler(db *gorm.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		shop := c.Query("handle")
-		c.HTML(http.StatusOK, "home.html", gin.H{
-			"ShopDomain": shop,
+		c.HTML(http.StatusOK, "home", gin.H{
+			"name": shop,
 		})
 	}
 }

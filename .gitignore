@@ -1,1 +1,4 @@
 config.json
+start_tunnel.sh
+tunnel.log
+.idx/*

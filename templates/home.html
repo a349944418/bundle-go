@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>应用首页</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        h1 { color: #2ecc71; }
-        p { font-size: 18px; }
-        a { color: #3498db; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-    </style>
-</head>
-<body>
-    <h1>欢迎来到应用首页！</h1>
-    <p>当前站点（店铺）：{{.ShopDomain}}</p>
-    <p><a href="/protected?shop={{.ShopDomain}}">访问受保护内容</a></p>
-    <p><a href="/install?handle={{.ShopDomain}}">重新授权（测试）</a></p>
-</body>
-</html>
+{{ template "base.html" . }}
+
+{{ define "title" }}首页{{ end }}
+
+{{ define "content" }}
+<h1>Hello {{ .name }}</h1>
+<p>这是首页内容</p>
+{{ end }}
